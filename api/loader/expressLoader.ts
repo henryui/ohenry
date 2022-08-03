@@ -1,5 +1,5 @@
 import helmet from 'helmet';
-import type { Express, Request, Response, NextFunction } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import expressLayouts from 'express-ejs-layouts';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -7,6 +7,7 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import type { Redis } from 'ioredis';
 import cors from 'cors';
+import path from 'path';
 import routes from './routes';
 import passport from './passport';
 import assets from '../controllers/_assets.json';
@@ -25,6 +26,11 @@ const expressLoader = (app: Express, redisClient: Redis) => {
 
   app.use(expressLayouts);
   app.set('view engine', 'ejs');
+  app.use(
+    express.static(path.join(__dirname, '..', '..', 'dist'), {
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    }),
+  );
 
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json({ limit: '10mb' }));

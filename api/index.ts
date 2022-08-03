@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
-import { expressLoader, redisLoader, schema } from './api/loader';
+import { expressLoader, redisLoader, schema } from './loader';
 
 const PORT = process.env.PORT || 3334;
 
@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3334;
 
     const redisClient = redisLoader();
     expressLoader(app, redisClient);
-    await schema.connect(process.env.MONGO_URI);
+    await schema.connect(process.env.MONGO_URI!);
 
     const server = app.listen(PORT, () => {
       // @ts-ignore
